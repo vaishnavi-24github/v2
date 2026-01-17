@@ -1,0 +1,57 @@
+.deal-list-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.content {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-actions h1 {
+  margin: 0;
+  color: #333;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.loading-card {
+  text-align: center;
+  padding: 40px;
+}
+
+.deals-table {
+  width: 100%;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-state p {
+  font-size: 16px;
+}
+
+.no-stage {
+  color: #999;
+  font-style: italic;
+}

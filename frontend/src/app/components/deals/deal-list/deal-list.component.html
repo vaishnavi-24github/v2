@@ -1,0 +1,71 @@
+<div class="deal-list-container">
+  <app-navigation></app-navigation>
+
+  <div class="content">
+    <div class="header-actions">
+      <h1>Deal Pipeline</h1>
+    </div>
+
+    <mat-card *ngIf="loading" class="loading-card">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading deals...</p>
+    </mat-card>
+
+    <mat-card *ngIf="!loading">
+      <table mat-table [dataSource]="deals" class="deals-table">
+        <ng-container matColumnDef="clientName">
+          <th mat-header-cell *matHeaderCellDef>Client</th>
+          <td mat-cell *matCellDef="let deal">{{ deal.clientName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dealType">
+          <th mat-header-cell *matHeaderCellDef>Deal Type</th>
+          <td mat-cell *matCellDef="let deal">{{ deal.dealType || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="sector">
+          <th mat-header-cell *matHeaderCellDef>Sector</th>
+          <td mat-cell *matCellDef="let deal">{{ deal.sector || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="stage">
+          <th mat-header-cell *matHeaderCellDef>Stage</th>
+          <td mat-cell *matCellDef="let deal">
+            <mat-chip *ngIf="getStageDisplay(deal)" [color]="getStageColor(getStageDisplay(deal))">
+              {{ getStageDisplay(deal) }}
+            </mat-chip>
+            <span *ngIf="!getStageDisplay(deal)" class="no-stage">-</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dealValue" *ngIf="isAdmin">
+          <th mat-header-cell *matHeaderCellDef>Deal Value</th>
+          <td mat-cell *matCellDef="let deal">{{ formatCurrency(deal.dealValue || 0) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let deal">
+            <button mat-button color="primary" (click)="viewDeal(deal)" matTooltip="View Deal">
+              VIEW
+            </button>
+            <button mat-button color="primary" (click)="editDeal(deal)" matTooltip="Edit Deal">
+              EDIT
+            </button>
+            <button mat-button color="warn" *ngIf="isAdmin" (click)="deleteDeal(deal)" matTooltip="Delete Deal">
+              DELETE
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <div *ngIf="deals.length === 0" class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>No deals found. Create your first deal to get started.</p>
+      </div>
+    </mat-card>
+  </div>
+</div>

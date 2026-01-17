@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+  <button mat-button routerLink="/deals" routerLinkActive="active">
+    PIPELINE
+  </button>
+  <button mat-button routerLink="/deals/new" routerLinkActive="active">
+    CREATE DEAL
+  </button>
+  <ng-container *ngIf="isAdmin">
+    <button mat-button routerLink="/admin/users" routerLinkActive="active">
+      USER DETAILS
+    </button>
+    <button mat-button routerLink="/admin/users/new" routerLinkActive="active">
+      CREATE USER
+    </button>
+  </ng-container>
+  <span class="spacer"></span>
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

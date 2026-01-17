@@ -1,0 +1,113 @@
+<div class="deal-details-container">
+  <app-navigation></app-navigation>
+
+  <div class="content">
+    <mat-card *ngIf="loading" class="loading-card">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading deal details...</p>
+    </mat-card>
+
+    <mat-card *ngIf="!loading && deal">
+      <mat-card-header>
+        <mat-card-title>Deal Details</mat-card-title>
+        <div class="header-actions">
+          <button mat-button color="primary" (click)="editDeal()">
+            <mat-icon>edit</mat-icon>
+            Edit Deal
+          </button>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="deal-info">
+          <div class="info-row">
+            <span class="label">Deal Name:</span>
+            <span class="value">{{ deal.dealName }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Client Name:</span>
+            <span class="value">{{ deal.clientName }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Deal Type:</span>
+            <span class="value">{{ deal.dealType || '-' }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Sector:</span>
+            <span class="value">{{ deal.sector || '-' }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Summary:</span>
+            <span class="value">{{ deal.summary || deal.description || '-' }}</span>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Stage:</span>
+            <span class="value">
+              <mat-chip *ngIf="getStageDisplay(deal)" [color]="getStageColor(getStageDisplay(deal))">
+                {{ getStageDisplay(deal) }}
+              </mat-chip>
+              <span *ngIf="!getStageDisplay(deal)">-</span>
+            </span>
+            <button mat-button color="primary" (click)="updateStage()">
+              <mat-icon>swap_vert</mat-icon>
+              Update Stage
+            </button>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Deal Value:</span>
+            <span class="value" *ngIf="!isEditMode || !isAdmin">
+              {{ formatCurrency(deal.dealValue || 0) }}
+            </span>
+            <form *ngIf="isEditMode && isAdmin" [formGroup]="dealValueForm" (ngSubmit)="updateDealValue()" class="deal-value-form">
+              <mat-form-field appearance="outline">
+                <mat-label>Deal Value</mat-label>
+                <input matInput type="number" formControlName="dealValue" required>
+              </mat-form-field>
+              <button mat-button type="submit" color="primary" [disabled]="dealValueForm.invalid || loading">
+                Save
+              </button>
+              <button mat-button type="button" (click)="isEditMode = false">Cancel</button>
+            </form>
+            <button *ngIf="!isEditMode && isAdmin" mat-button color="primary" (click)="isEditMode = true">
+              <mat-icon>edit</mat-icon>
+              Edit Value
+            </button>
+          </div>
+
+          <div class="info-row">
+            <span class="label">Expected Close Date:</span>
+            <span class="value">{{ formatDate(deal.expectedCloseDate) }}</span>
+          </div>
+
+          <div class="info-row notes-section">
+            <div class="notes-header">
+              <span class="label">Notes:</span>
+              <button mat-button color="primary" (click)="addNote()">
+                <mat-icon>note_add</mat-icon>
+                Add Note
+              </button>
+            </div>
+            <div class="notes-list" *ngIf="deal.notes && deal.notes.length > 0">
+              <div class="note-item" *ngFor="let note of deal.notes">
+                <div class="note-content">{{ note.content }}</div>
+                <div class="note-meta">
+                  <span>{{ formatDate(note.createdDate) }}</span>
+                  <span *ngIf="note.createdBy"> by {{ note.createdBy }}</span>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!deal.notes || deal.notes.length === 0" class="no-notes">
+              No notes available.
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
